@@ -82,6 +82,7 @@ public class PeakListener {
 				long timeSincePeak = currentTime - peakEnd;
 				if (timeSincePeak >= 2000) {
 					onSilence();
+					peakEnd = currentTime;
 				}
 			}
 		}
