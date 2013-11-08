@@ -1,8 +1,14 @@
 package jsqueak;
 
+/**
+ * A super-fast audio buffer.
+ * Pointers & shit. It's basically C, but in Java. I win.
+ * @author RPN
+ *
+ */
 public class AudioBuffer {
 	private final int CHUNK_SIZE = 1024;
-	private final int BUFFER_LENGTH = 1000;
+	private final int BUFFER_LENGTH = 10000;
 	private int[] raw_data;
 	private int mPointer;
 	
@@ -25,34 +31,53 @@ public class AudioBuffer {
 		return raw_data[index];
 	}
 	
+	/**
+	 * Gets the segment of audio up to now of length length.
+	 * @param length
+	 * @return
+	 */
 	public Segment getSegment(int length) {
 		int start = mPointer - length;
 		if (start < 0) {
 			start += raw_data.length;
 		}
-		return new Segment(this, mPointer - length, length);
+
+		return new Segment(this, start, length);
 	}
 	
 	public Segment getLatestChunk() {
 		return this.getSegment(this.CHUNK_SIZE);
 	}
 	
-	public void addSamples(int[] samples) {
+	/**
+	 * Add samples to buffer.
+	 * If samples is longer than the buffer bad things might happen.
+	 * @param samples
+	 */
+	public void addSamples(int[] samples, int length) {
 		int distToEnd;
-		if (mPointer + samples.length >= raw_data.length) {
+		
+		if (mPointer + length >= raw_data.length) {
 			distToEnd = raw_data.length-mPointer;
 			System.arraycopy(samples, 0, raw_data, mPointer, distToEnd);
-			System.arraycopy(samples, distToEnd, raw_data, 0, samples.length-distToEnd);
+			System.arraycopy(samples, distToEnd, raw_data, 0, length-distToEnd);
 		}
 		else {
-			System.arraycopy(samples, 0, raw_data, mPointer, samples.length);
+			System.arraycopy(samples, 0, raw_data, mPointer, length);
 		}
-		mPointer += samples.length;
+		
+		mPointer += length;
 		if (mPointer >= raw_data.length) {
 			mPointer -= raw_data.length;
 		}
 	}
 	
+	/**
+	 * A segment of audio.
+	 * Really just a wrapper over the AudioBuffer, but looks to outsiders like an array of integers.
+	 * @author RPN
+	 *
+	 */
 	public class Segment {
 		private final int startPointer;
 		public int length;
@@ -68,10 +93,18 @@ public class AudioBuffer {
 			return mBuffer.getAbsSample(startPointer + index);
 		}
 		
+		/**
+		 * Extends this segment by extraLength samples.
+		 * @param extraLength
+		 */
 		public void extend(int extraLength) {
 			this.length += extraLength;
 		}
 		
+		/**
+		 * Extends this segment to the end of the given segment.
+		 * @param segment
+		 */
 		public void extend(Segment segment) {
 			int newLen = (segment.startPointer + segment.length) - this.startPointer;
 			if (newLen < 0) {
