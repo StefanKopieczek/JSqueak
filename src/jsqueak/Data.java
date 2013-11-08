@@ -13,6 +13,7 @@ public class Data {
 	}
 	
 	public String kNearestNeighbour(Datum point, int k) {
+
 		HashMap<Double,Datum> vals = new HashMap<Double,Datum>();
 		ArrayList<Double> dists = new ArrayList<Double>();
 		double dist;
@@ -28,7 +29,9 @@ public class Data {
 		
 		int most = 0;
 		int val = 0;
+
 		LinkedHashMap<String, Integer> kNearest = new LinkedHashMap<String, Integer>();
+
 		for (int i=0; i<k; i++) {
 			String name = vals.get(sortedDists[i]).name;
 			if (!kNearest.containsKey(name)) {
@@ -42,7 +45,7 @@ public class Data {
 				most = val;
 			}
 		}
-		
+
 		ArrayList<String> winners = new ArrayList<String>();
 		for (String name : kNearest.keySet()) {
 			if (kNearest.get(name) == most) {
