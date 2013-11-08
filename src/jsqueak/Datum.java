@@ -19,11 +19,14 @@ public class Datum {
 	
 	public double getDistSquared(Datum other) {
 		double result = 0;
-		
+		double diff = 0;
+		assert(this.values.length == other.values.length);
+
 		for (int i=0; i<other.getLength(); i++) {
-			result += other.get(i) * other.get(i);
+			diff = other.get(i) - this.get(i);
+			result += diff*diff;
 		}
-		
+
 		return result;
 	}
 }

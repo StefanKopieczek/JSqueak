@@ -56,7 +56,7 @@ public class AudioUtils {
 		energy += odd*4;
 		
 		energy += sft(segment, high);
-		return (energy*(h/3)) / (high-low);
+		return (energy*(h/3));// / (high-low);
 	}
 	
 	/**
@@ -79,7 +79,7 @@ public class AudioUtils {
 			accI += precI;
 			expR = Math.cos(accI);
 			expI = Math.sin(accI);
-			
+
 			resultR += expR * a.getSample(n);
 			resultI += expI * a.getSample(n);
 		}

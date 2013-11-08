@@ -15,7 +15,8 @@ public class Main {
 		Mixer mixer = null;
 		PeakListener peakListener = new PeakListener(400,1000);
 		AudioBuffer buffer = peakListener.getBuffer();
-		peakListener.addPeakHandler(new LetterDetector("letterData.txt"));
+		peakListener.addPeakHandler(new LetterDetector("letterData.txt", Integer.parseInt(args[0])));
+		//peakListener.addPeakHandler(new LetterTrainer());
 		byte[] rawChunk = new byte[1024];
 		int[] chunk = new int[256];
 		int frame = 0;

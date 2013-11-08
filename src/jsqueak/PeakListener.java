@@ -17,7 +17,7 @@ public class PeakListener {
 	private double highPass;
 	private AudioBuffer.Segment peakSegment;
 	
-	private static long MIN_PEAK_DURATION = 1000;
+	private static long MIN_PEAK_DURATION = 500;
 	
 	public PeakListener(double lowPass, double highPass) {
 		this.lowPass = lowPass;

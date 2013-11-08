@@ -18,13 +18,13 @@ public class Data {
 	
 	public String kNearestNeighbour(Datum point, int k) {
 
-		HashMap<Double,Datum> vals = new HashMap<Double,Datum>();
+		HashMap<Double,String> vals = new HashMap<Double,String>();
 		ArrayList<Double> dists = new ArrayList<Double>();
 		double dist;
 		
 		for (Datum d : data) {
 			dist = point.getDistSquared(d);
-			vals.put(dist, d);
+			vals.put(dist, d.name);
 			dists.add(dist);
 		}
 		
@@ -37,7 +37,7 @@ public class Data {
 		LinkedHashMap<String, Integer> kNearest = new LinkedHashMap<String, Integer>();
 
 		for (int i=0; i<k; i++) {
-			String name = vals.get(sortedDists[i]).name;
+			String name = vals.get(sortedDists[i]);
 			if (!kNearest.containsKey(name)) {
 				val = 1;
 			}
@@ -58,8 +58,10 @@ public class Data {
 		}
 		
 		for (String letter : kNearest.keySet()) {
-			if (winners.contains(letter)) {
-				return letter;
+			for (String l : winners) {
+				if (l.equals(letter)) {
+					return letter;
+				}
 			}
 		}
 		

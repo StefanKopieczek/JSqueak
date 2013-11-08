@@ -95,7 +95,9 @@ public class AudioBuffer {
 		}
 		
 		public Segment subsegment(int start, int length) {
-			int absStart = start + mPointer;
+			assert(start < this.length);
+			assert(start+length < this.length);
+			int absStart = start + startPointer;
 			if (absStart >= mBuffer.raw_data.length){
 				absStart -= mBuffer.raw_data.length;
 			}
