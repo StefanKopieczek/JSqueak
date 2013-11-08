@@ -2,7 +2,7 @@ package jsqueak;
 
 public class Datum {
 	public String name;
-	private double[] values;
+	public double[] values;
 	
 	public Datum(String name, double[] vals) {
 		this.name = name;

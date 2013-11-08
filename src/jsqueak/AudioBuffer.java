@@ -90,7 +90,16 @@ public class AudioBuffer {
 		}
 		
 		public int getSample(int index) {
+			assert(index < this.length);
 			return mBuffer.getAbsSample(startPointer + index);
+		}
+		
+		public Segment subsegment(int start, int length) {
+			int absStart = start + mPointer;
+			if (absStart >= mBuffer.raw_data.length){
+				absStart -= mBuffer.raw_data.length;
+			}
+			return new Segment(mBuffer, absStart, length);
 		}
 		
 		/**

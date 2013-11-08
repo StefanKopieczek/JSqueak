@@ -17,8 +17,6 @@ public class PeakListener {
 	private double highPass;
 	private AudioBuffer.Segment peakSegment;
 	
-	private int counter =0;
-	
 	private static long MIN_PEAK_DURATION = 1000;
 	
 	public PeakListener(double lowPass, double highPass) {
@@ -65,8 +63,6 @@ public class PeakListener {
 		else 
 		{
 			if (energy > this.highPass) {
-				counter++;
-				System.out.print(counter);
 				System.out.println("PEAK STARTED");
 				
 				this.isHigh = true;

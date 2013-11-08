@@ -12,6 +12,10 @@ public class Data {
 		data = new ArrayList<Datum>();
 	}
 	
+	public void addDatum(Datum d) {
+		data.add(d);
+	}
+	
 	public String kNearestNeighbour(Datum point, int k) {
 
 		HashMap<Double,Datum> vals = new HashMap<Double,Datum>();
