@@ -13,6 +13,7 @@ public class PeakListener {
 	private AudioBuffer mBuffer;
 	private boolean isHigh;
 	private long peakStart=0;
+	private long peakEnd = 0;
 	private double lowPass;
 	private double highPass;
 	private AudioBuffer.Segment peakSegment;
@@ -25,6 +26,7 @@ public class PeakListener {
 		this.isHigh = false;
 		this.mBuffer = new AudioBuffer();
 		this.callbacks = new ArrayList<PeakHandler>();
+		peakEnd = (new Date()).getTime();
 	}
 	
 	public AudioBuffer getBuffer() {
@@ -45,6 +47,12 @@ public class PeakListener {
 		}
 	}
 	
+	private void onSilence() {
+		for (PeakHandler handler : this.callbacks) {
+			handler.handleSilence();
+		}
+	}
+	
 	public void analyseBuffer() {
 		AudioBuffer.Segment latestChunk = mBuffer.getLatestChunk();
 		double energy = AudioUtils.getEnergy(latestChunk);
@@ -54,6 +62,7 @@ public class PeakListener {
 		if (this.isHigh) {
 			if ((energy <= this.lowPass) && (peakLength >= MIN_PEAK_DURATION)) {
 				this.isHigh = false;
+				peakEnd = (new Date()).getTime();
 				onPeak(peakSegment);
 			}
 			else {
@@ -68,6 +77,12 @@ public class PeakListener {
 				this.isHigh = true;
 				peakStart = currentTime;
 				peakSegment = latestChunk;
+			}
+			else {
+				long timeSincePeak = currentTime - peakEnd;
+				if (timeSincePeak >= 2000) {
+					onSilence();
+				}
 			}
 		}
 		

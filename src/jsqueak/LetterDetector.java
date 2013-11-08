@@ -86,4 +86,9 @@ public class LetterDetector implements PeakHandler {
 			e.printStackTrace();
 		}
 	}
+
+	public void handleSilence() {
+		// TODO Auto-generated method stub
+		
+	}
 }
