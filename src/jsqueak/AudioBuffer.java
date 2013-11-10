@@ -11,10 +11,21 @@ public class AudioBuffer {
 	private final int BUFFER_LENGTH = 10000;
 	private int[] raw_data;
 	private int mPointer;
+	private int lowPassFilterValue = 200;
+	private boolean lowPassFilterOn = false;
 	
 	public AudioBuffer() {
 		this.raw_data = new int[this.BUFFER_LENGTH * this.CHUNK_SIZE];
 		this.mPointer = 0;
+	}
+	
+	public void activateLowPassFilter(int value) {
+		lowPassFilterValue = value;
+		lowPassFilterOn = true;
+	}
+	
+	public void deactivateLowPassFilter() {
+		lowPassFilterOn = false;
 	}
 	
 	public int getSample(int index) {
@@ -64,6 +75,15 @@ public class AudioBuffer {
 		}
 		else {
 			System.arraycopy(samples, 0, raw_data, mPointer, length);
+		}
+		
+		if (lowPassFilterOn) {
+			for (int i=0; i<length; i++) {
+//				if (raw_data[mPointer+i] < lowPassFilterValue) {
+//					raw_data[mPointer+i] = 0;
+//				}
+				raw_data[mPointer+i] = Math.max(0,raw_data[mPointer+i]-lowPassFilterValue);
+			}
 		}
 		
 		mPointer += length;

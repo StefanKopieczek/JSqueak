@@ -56,7 +56,7 @@ public class AudioUtils {
 		energy += odd*4;
 		
 		energy += sft(segment, high);
-		return (energy*(h/3));// / (high-low);
+		return (energy*(h/3)) / (high-low);
 	}
 	
 	/**
