@@ -1,5 +1,6 @@
 package jsqueak;
 
+import java.awt.BorderLayout;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -55,14 +56,14 @@ public class Main {
 		line.start();
 		
 		final VisualiserWindow w = new VisualiserWindow();
-		final Visualiser v = new FrequencyVisualiser(buffer,600,200);
-		w.add(v);
+		w.add(new FrequencyVisualiser(buffer,600,200),BorderLayout.CENTER);
 		SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	w.begin();
             }
         });
 		
+		int ii = 0;
 		while (true){
 			length = line.read(rawChunk,0,rawChunk.length);
 			
@@ -79,11 +80,14 @@ public class Main {
 			//peakListener.analyseBuffer();
 			
 			//Do all drawing on the Event thread
-			SwingUtilities.invokeLater(new Runnable() {
-	            public void run() {
-	            	v.repaint();
-	            }
-	        });
+			if (ii % 10 == 0) {
+				SwingUtilities.invokeLater(new Runnable() {
+		            public void run() {
+		            	w.repaint();
+		            }
+		        });
+			}
+			ii++;
 		}
 	}
 }

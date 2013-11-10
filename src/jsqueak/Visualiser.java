@@ -14,9 +14,12 @@ public abstract class Visualiser extends JPanel{
 		mBuffer = buffer;
 		mWidth = width;
 		mHeight = height;
-		//setBounds(0,0,mWidth,mHeight);
-		this.setPreferredSize(new Dimension(mWidth,mHeight));
 	}
+	
+	@Override
+    public Dimension getPreferredSize() {
+        return new Dimension(mWidth, mHeight);
+    }
 	
 	@Override
 	public void paintComponent(Graphics g) {

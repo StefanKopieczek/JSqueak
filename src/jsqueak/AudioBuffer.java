@@ -79,10 +79,10 @@ public class AudioBuffer {
 		
 		if (lowPassFilterOn) {
 			for (int i=0; i<length; i++) {
-//				if (raw_data[mPointer+i] < lowPassFilterValue) {
-//					raw_data[mPointer+i] = 0;
-//				}
-				raw_data[mPointer+i] = Math.max(0,raw_data[mPointer+i]-lowPassFilterValue);
+				if (raw_data[mPointer+i] < lowPassFilterValue) {
+					raw_data[mPointer+i] = 0;
+				}
+				//raw_data[mPointer+i] = Math.max(0,raw_data[mPointer+i]-lowPassFilterValue);
 			}
 		}
 		

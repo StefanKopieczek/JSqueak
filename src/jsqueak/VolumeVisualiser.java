@@ -15,7 +15,7 @@ public class VolumeVisualiser extends Visualiser{
 	 */
 	@Override
 	public void update(Graphics g) {
-		double energy = AudioUtils.getEnergy(mBuffer.getSegment(10000));
+		double energy = AudioUtils.getEnergy(mBuffer.getSegment(5000));
 		int size = (int) (300*(1-Math.exp(-energy/500)));
 		g.setColor(Color.RED);
 		g.fillOval((mWidth-size)/2, (mHeight-size)/2, size,size);
