@@ -1,6 +1,7 @@
 package jsqueak;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -17,7 +18,7 @@ public class Main {
 		Mixer mixer = null;
 		//PeakListener peakListener = new PeakListener(80,100);
 		final AudioBuffer buffer = new AudioBuffer();
-		buffer.activateLowPassFilter(100);
+		//buffer.activateLowPassFilter(100);
 		//peakListener.addPeakHandler(new LetterDetector("letterData.txt", 1));
 		//peakListener.addPeakHandler(new LetterTrainer("letterData.txt"));
 		byte[] rawChunk = new byte[1024];
@@ -56,10 +57,15 @@ public class Main {
 		line.start();
 		
 		final VisualiserWindow w = new VisualiserWindow();
-		w.add(new FrequencyVisualiser(buffer,600,200),BorderLayout.CENTER);
+		FrequencyVisualiser vis = new FrequencyVisualiser(buffer);
+		vis.setBackground(Color.BLACK);
+		vis.setForeground(Color.GREEN);
+		w.add(vis, BorderLayout.CENTER);
 		SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	w.begin();
+            	w.setBounds(0,0,600,200);
+            	w.setAlwaysOnTop(true);
             }
         });
 		

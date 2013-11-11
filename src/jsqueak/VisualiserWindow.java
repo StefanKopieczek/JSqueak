@@ -25,6 +25,6 @@ public class VisualiserWindow extends JFrame {
 		createBufferStrategy(2);
 		
 		this.pack();
-		this.setResizable(false);
+		//this.setResizable(false);
 	}
 }

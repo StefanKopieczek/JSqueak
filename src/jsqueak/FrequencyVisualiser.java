@@ -12,29 +12,29 @@ public class FrequencyVisualiser extends Visualiser{
 
 	private int[][] BANDS = {{40,400},{400,1000},{1000,20000}};
 	
-	public FrequencyVisualiser(AudioBuffer buffer, int width, int height) {
-		super(buffer, width, height);
+	public FrequencyVisualiser(AudioBuffer buffer) {
+		super(buffer);
 	}
 	
 	/**
 	 * Updates the visualiser based on a given segment
 	 */
 	public void update(Graphics g) {
-		g.setColor(Color.RED);
+		g.setColor(this.getForeground());
 		AudioBuffer.Segment segment = mBuffer.getSegment(2048);
 		int df = (maxFreq - minFreq) / numBars;
-		int dx = mWidth / numBars;
+		double dx = (double)getWidth() / (double)numBars;
 		int prevX = 0;
-		int prevY = mHeight;
+		int prevY = getHeight();
 		for (int i=0; i<numBars; i++) {
 			int f = minFreq + i*df;
-			int x = dx * i;
+			int x = (int) (dx * i);
 			
 			double energy = AudioUtils.getEnergyAtFrequency(segment, f, 44100);
 			
-			double scale = energy/200;
-			int size = (int) (scale*mHeight);
-			int y = mHeight-size;
+			double scale = energy/500;
+			int size = (int) (scale*getHeight());
+			int y = getHeight()-size-1;
 					
 			g.drawLine(prevX,prevY,x,y);
 

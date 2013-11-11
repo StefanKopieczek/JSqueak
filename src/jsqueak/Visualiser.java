@@ -10,16 +10,14 @@ public abstract class Visualiser extends JPanel{
 	protected int mWidth, mHeight;
 	protected AudioBuffer mBuffer;
 	
-	public Visualiser(AudioBuffer buffer, int width, int height) {
+	public Visualiser(AudioBuffer buffer) {
 		mBuffer = buffer;
-		mWidth = width;
-		mHeight = height;
 	}
 	
-	@Override
-    public Dimension getPreferredSize() {
-        return new Dimension(mWidth, mHeight);
-    }
+//	@Override
+//    public Dimension getPreferredSize() {
+//        return new Dimension(mWidth, mHeight);
+//    }
 	
 	@Override
 	public void paintComponent(Graphics g) {
@@ -32,8 +30,8 @@ public abstract class Visualiser extends JPanel{
 	 * Draws the background to the screen to clear it.
 	 */
 	public void clearScreen(Graphics g) {
-		g.setColor(Color.WHITE);
-		g.fillRect(0,0,mWidth,mHeight);
+		g.setColor(getBackground());
+		g.fillRect(0,0,this.getWidth(),this.getHeight());
 	}
 	
 	public abstract void update(Graphics g);

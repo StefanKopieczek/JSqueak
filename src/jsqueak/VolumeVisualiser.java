@@ -6,8 +6,8 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 public class VolumeVisualiser extends Visualiser{
-	public VolumeVisualiser(AudioBuffer buffer, int width, int height) {
-		super(buffer, width, height);
+	public VolumeVisualiser(AudioBuffer buffer) {
+		super(buffer);
 	}
 
 	/**
