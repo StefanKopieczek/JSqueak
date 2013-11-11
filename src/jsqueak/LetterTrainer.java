@@ -1,12 +1,9 @@
 package jsqueak;
 
 import java.io.BufferedWriter;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 
 /**
@@ -16,28 +13,31 @@ import java.util.ArrayList;
  */
 public class LetterTrainer implements PeakHandler {
 	private int SECTIONS = 3;
-	private int[][] BANDS = {{40,400},{400,1000},{1000,10000}};
-	private String letters = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+	private int[][] BANDS = {{40,400},{400,1000},{1000,20000}};
+	private final String letters = "abcdefghijklmnopqrstuvwxyz0123456789";
 	private int index;
+	private final String filename;
 	
-	public LetterTrainer() {
+	public LetterTrainer(String filename) {
 		this.index = 0;
+		this.filename = filename;
 	}
 
 	public void handlePeak(AudioBuffer.Segment segment) {
-		System.out.println("Analysing audio data...");
+		System.out.println("HANDLING PEAK!");
 		Datum point = analyse(segment);
-		
-		char letter = letters.charAt(index);
-		point.name = String.valueOf(letter);
-		writeLetter("letterData.txt",point);
+		point.name = String.valueOf(letters.charAt(index));
+		writeDatumToFile(filename, point);
 		
 		index++;
 		if (index >= letters.length()) {
 			index = 0;
 		}
 		System.out.print("Now say: ");
-		System.out.print(letters.charAt(index));
+
+		System.out.println(letters.charAt(index));
+		//CALLBACK WITH LETTER
 	}
 
 	private Datum analyse(AudioBuffer.Segment segment) {
@@ -65,27 +65,24 @@ public class LetterTrainer implements PeakHandler {
 		return new Datum("Unknown",valArray);
 	}
 	
-	private void writeLetter(String filename, Datum letter) {
-		PrintWriter writer = null;
 
+	private void writeDatumToFile(String filename, Datum point) {
 		try {
-		    writer = new PrintWriter(new BufferedWriter(new FileWriter(filename, true)));
+		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(filename, true)));
 		    StringBuilder builder = new StringBuilder();
-		    builder.append(letter.name);
-		    for (double val : letter.values) {
+		    builder.append(point.name);
+		    
+		    for (double val : point.values){
 		    	builder.append(" ");
 		    	builder.append(val);
 		    }
-
-		    writer.println(builder.toString());
-		} catch (IOException ex){
-		  // report
-		} finally {
-		   try {writer.close();} catch (Exception ex) {}
+		    out.println(builder.toString());
+		    out.close();
+		} catch (IOException e) {
+		    //oh noes!
 		}
 	}
 
-	@Override
 	public void handleSilence() {
 		// TODO Auto-generated method stub
 		

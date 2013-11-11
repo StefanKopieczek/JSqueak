@@ -1,5 +1,6 @@
 package jsqueak;
 
+import java.awt.BorderLayout;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -8,15 +9,17 @@ import javax.sound.sampled.Line;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.Mixer;
 import javax.sound.sampled.TargetDataLine;
+import javax.swing.SwingUtilities;
 
 public class Main {
 	public static void main(String[] args) {
 		TargetDataLine line = null;
 		Mixer mixer = null;
-		PeakListener peakListener = new PeakListener(400,1000);
-		AudioBuffer buffer = peakListener.getBuffer();
-		peakListener.addPeakHandler(new LetterDetector("letterData.txt", Integer.parseInt(args[0])));
-		//peakListener.addPeakHandler(new LetterTrainer());
+		//PeakListener peakListener = new PeakListener(80,100);
+		final AudioBuffer buffer = new AudioBuffer();
+		buffer.activateLowPassFilter(100);
+		//peakListener.addPeakHandler(new LetterDetector("letterData.txt", 1));
+		//peakListener.addPeakHandler(new LetterTrainer("letterData.txt"));
 		byte[] rawChunk = new byte[1024];
 		int[] chunk = new int[256];
 		int frame = 0;
@@ -43,21 +46,7 @@ public class Main {
 				e.printStackTrace();
 			}
 		}
-		
-//		AudioFormat format = new AudioFormat(44100,8,1,false,false);
-//		DataLine.Info info = new DataLine.Info(TargetDataLine.class, 
-//		    format); // format is an AudioFormat object
-//		if (!AudioSystem.isLineSupported(info)) {
-//		    // Don't handle the error ... 
-//
-//		}
-//		// Obtain and open the line.
-//		try {
-//		    line = (Port) AudioSystem.getLine(Port.Info.MICROPHONE);
-//		    line.open(format);
-//		} catch (LineUnavailableException ex) {
-//		    // Handle the error ... 
-//		}
+
 		try {
 			line.open();
 		} catch (LineUnavailableException e1) {
@@ -66,6 +55,15 @@ public class Main {
 		}
 		line.start();
 		
+		final VisualiserWindow w = new VisualiserWindow();
+		w.add(new FrequencyVisualiser(buffer,600,200),BorderLayout.CENTER);
+		SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+            	w.begin();
+            }
+        });
+		
+		int ii = 0;
 		while (true){
 			length = line.read(rawChunk,0,rawChunk.length);
 			
@@ -79,7 +77,17 @@ public class Main {
 			
 			buffer.addSamples(chunk, length/4);
 			
-			peakListener.analyseBuffer();
+			//peakListener.analyseBuffer();
+			
+			//Do all drawing on the Event thread
+			if (ii % 10 == 0) {
+				SwingUtilities.invokeLater(new Runnable() {
+		            public void run() {
+		            	w.repaint();
+		            }
+		        });
+			}
+			ii++;
 		}
 	}
 }
