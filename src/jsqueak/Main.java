@@ -57,7 +57,7 @@ public class Main {
 		line.start();
 		
 		final VisualiserWindow w = new VisualiserWindow();
-		FrequencyVisualiser vis = new FrequencyVisualiser(buffer);
+		Visualiser vis = new SegmentVisualiser(buffer);
 		vis.setBackground(Color.BLACK);
 		vis.setForeground(Color.GREEN);
 		w.add(vis, BorderLayout.CENTER);
@@ -86,7 +86,7 @@ public class Main {
 			//peakListener.analyseBuffer();
 			
 			//Do all drawing on the Event thread
-			if (ii % 10 == 0) {
+			if (ii % 20 == 0) {
 				SwingUtilities.invokeLater(new Runnable() {
 		            public void run() {
 		            	w.repaint();
