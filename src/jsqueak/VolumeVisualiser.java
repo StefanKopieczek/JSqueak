@@ -3,8 +3,6 @@ package jsqueak;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import javax.swing.JPanel;
-
 public class VolumeVisualiser extends Visualiser{
 	public VolumeVisualiser(AudioBuffer buffer) {
 		super(buffer);

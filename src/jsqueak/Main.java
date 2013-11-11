@@ -2,6 +2,7 @@ package jsqueak;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -16,8 +17,8 @@ public class Main {
 	public static void main(String[] args) {
 		TargetDataLine line = null;
 		Mixer mixer = null;
-		//PeakListener peakListener = new PeakListener(80,100);
 		final AudioBuffer buffer = new AudioBuffer();
+		PeakListener peakListener = new PeakListener(buffer, 300,500);
 		//buffer.activateLowPassFilter(100);
 		//peakListener.addPeakHandler(new LetterDetector("letterData.txt", 1));
 		//peakListener.addPeakHandler(new LetterTrainer("letterData.txt"));
@@ -25,10 +26,11 @@ public class Main {
 		int[] chunk = new int[256];
 		int frame = 0;
 		int length;
-		
+		String mixerName = ".*Primary Sound Capture.*";
+		mixerName = ".*What U Hear.*";
 		for (Mixer.Info info : AudioSystem.getMixerInfo()) {
 			System.out.println(info.getName());
-			if (info.getName().matches(".*Primary Sound Capture.*")) {
+			if (info.getName().matches(mixerName)) {
 				System.out.println("GETTING MIXER");
 				mixer = AudioSystem.getMixer(info);
 				break;
@@ -57,10 +59,13 @@ public class Main {
 		line.start();
 		
 		final VisualiserWindow w = new VisualiserWindow();
-		Visualiser vis = new SegmentVisualiser(buffer);
+		Visualiser vis = new FFTFrequencyVisualiser(buffer);
+		//Visualiser vis = new StreamVisualiser(buffer,5000);
 		vis.setBackground(Color.BLACK);
 		vis.setForeground(Color.GREEN);
-		w.add(vis, BorderLayout.CENTER);
+		w.add(vis);
+
+		//peakListener.addPeakHandler((SegmentVisualiser)vis);
 		SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	w.begin();
@@ -86,7 +91,7 @@ public class Main {
 			//peakListener.analyseBuffer();
 			
 			//Do all drawing on the Event thread
-			if (ii % 20 == 0) {
+			if (ii % 10 == 0) {
 				SwingUtilities.invokeLater(new Runnable() {
 		            public void run() {
 		            	w.repaint();

@@ -1,29 +1,31 @@
 package jsqueak;
 
-import java.awt.Color;
 import java.awt.Graphics;
 
-import javax.swing.JPanel;
+import jsqueak.AudioBuffer.Segment;
 
-public class SegmentVisualiser extends Visualiser{
+public class SegmentVisualiser extends Visualiser
+implements PeakHandler {
+	AudioBuffer.Segment mSegment;
+	
 	public SegmentVisualiser(AudioBuffer buffer) {
 		super(buffer);
+		mSegment = buffer.getLatestChunk();
 	}
-	
+
 	/**
 	 * Updates the visualiser based on a given segment
 	 */
 	public void update(Graphics g) {
 		g.setColor(this.getForeground());
-		AudioBuffer.Segment segment = mBuffer.getSegment(50000);
 
-		double dx = (double)getWidth() / (double)segment.length;
+		double dx = (double)getWidth() / (double)mSegment.length;
 		int prevX = 0;
 		int prevY = getHeight()/2;
-		for (int i=0; i<segment.length; i++) {
+		for (int i=0; i<mSegment.length; i++) {
 			int x = (int) (dx * i);
 			
-			double energy = segment.getSample(i);
+			double energy = mSegment.getSample(i);
 			
 			double scale = energy/50000;
 			int size = (int) (scale*getHeight());
@@ -36,6 +38,17 @@ public class SegmentVisualiser extends Visualiser{
 			
 			//g.fillRect(x, mHeight-size, dx, size);
 		}
+	}
+
+	@Override
+	public void handlePeak(Segment segment) {
+		mSegment = segment;
+	}
+
+	@Override
+	public void handleSilence() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

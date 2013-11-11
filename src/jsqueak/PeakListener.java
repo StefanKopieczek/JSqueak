@@ -20,11 +20,11 @@ public class PeakListener {
 	
 	private static long MIN_PEAK_DURATION = 500;
 	
-	public PeakListener(double lowPass, double highPass) {
+	public PeakListener(AudioBuffer buffer, double lowPass, double highPass) {
 		this.lowPass = lowPass;
 		this.highPass = highPass;
 		this.isHigh = false;
-		this.mBuffer = new AudioBuffer();
+		this.mBuffer = buffer;
 		this.callbacks = new ArrayList<PeakHandler>();
 		peakEnd = (new Date()).getTime();
 	}

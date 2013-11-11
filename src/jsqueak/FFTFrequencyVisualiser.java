@@ -2,14 +2,19 @@ package jsqueak;
 
 import java.awt.Graphics;
 
-public class FrequencyVisualiser extends Visualiser{
+import org.apache.commons.math3.complex.Complex;
+import org.apache.commons.math3.transform.DftNormalization;
+import org.apache.commons.math3.transform.FastFourierTransformer;
+import org.apache.commons.math3.transform.TransformType;
+
+public class FFTFrequencyVisualiser extends Visualiser{
 	private int numBars = 300;
 	private int minFreq = 40;
 	private int maxFreq = 1000;
 
 	private int[][] BANDS = {{40,400},{400,1000},{1000,20000}};
 	
-	public FrequencyVisualiser(AudioBuffer buffer) {
+	public FFTFrequencyVisualiser(AudioBuffer buffer) {
 		super(buffer);
 	}
 	
@@ -18,18 +23,20 @@ public class FrequencyVisualiser extends Visualiser{
 	 */
 	public void update(Graphics g) {
 		g.setColor(this.getForeground());
-		AudioBuffer.Segment segment = mBuffer.getSegment(2048);
-		int df = (maxFreq - minFreq) / numBars;
+		AudioBuffer.Segment segment = mBuffer.getSegment(8192);
+
+		FastFourierTransformer fft = new FastFourierTransformer(DftNormalization.STANDARD);
+		Complex[] transformed = fft.transform(segment.asArray(), TransformType.FORWARD);
+		int numBars = 300;
 		double dx = (double)getWidth() / (double)numBars;
 		int prevX = 0;
 		int prevY = getHeight();
 		for (int i=0; i<numBars; i++) {
-			int f = minFreq + i*df;
 			int x = (int) (dx * i);
 			
-			double energy = AudioUtils.getEnergyAtFrequency(segment, f, 44100);
+			double energy = transformed[i].abs();
 			
-			double scale = energy/500;
+			double scale = energy/10000000;
 			int size = (int) (scale*getHeight());
 			int y = getHeight()-size-1;
 					

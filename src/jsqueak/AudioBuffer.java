@@ -8,7 +8,7 @@ package jsqueak;
  */
 public class AudioBuffer {
 	private final int CHUNK_SIZE = 1024;
-	private final int BUFFER_LENGTH = 10000;
+	private final int BUFFER_LENGTH = 500;
 	private int[] raw_data;
 	private int mPointer;
 	private int lowPassFilterValue = 200;
@@ -107,6 +107,22 @@ public class AudioBuffer {
 			this.mBuffer = buffer;
 			this.startPointer = start;
 			this.length = length;
+		}
+		
+		public Segment(Segment other) {
+			this.mBuffer = other.mBuffer;
+			this.startPointer = other.startPointer;
+			this.length = other.length;
+		}
+		
+		public double[] asArray() {
+			double[] vals = new double[this.length];
+			
+			for (int i=0; i<this.length; i++) {
+				vals[i] = getSample(i);
+			}
+			
+			return vals;
 		}
 		
 		public int getSample(int index) {
