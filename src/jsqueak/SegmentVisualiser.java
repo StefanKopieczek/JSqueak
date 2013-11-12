@@ -6,7 +6,7 @@ import jsqueak.AudioBuffer.Segment;
 
 public class SegmentVisualiser extends Visualiser
 implements PeakHandler {
-	AudioBuffer.Segment mSegment;
+	private AudioBuffer.Segment mSegment;
 	
 	public SegmentVisualiser(AudioBuffer buffer) {
 		super(buffer);
