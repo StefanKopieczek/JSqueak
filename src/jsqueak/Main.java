@@ -1,8 +1,6 @@
 package jsqueak;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -11,6 +9,7 @@ import javax.sound.sampled.Line;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.Mixer;
 import javax.sound.sampled.TargetDataLine;
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 public class Main {
@@ -27,7 +26,7 @@ public class Main {
 		int frame = 0;
 		int length;
 		String mixerName = ".*Primary Sound Capture.*";
-		mixerName = ".*What U Hear.*";
+		//mixerName = ".*What U Hear.*";
 		for (Mixer.Info info : AudioSystem.getMixerInfo()) {
 			System.out.println(info.getName());
 			if (info.getName().matches(mixerName)) {
@@ -59,6 +58,7 @@ public class Main {
 		line.start();
 		
 		final VisualiserWindow w = new VisualiserWindow();
+		
 		Visualiser vis = new FFTFrequencyVisualiser(buffer);
 		//Visualiser vis = new StreamVisualiser(buffer,5000);
 		vis.setBackground(Color.BLACK);
@@ -68,6 +68,8 @@ public class Main {
 		//peakListener.addPeakHandler((SegmentVisualiser)vis);
 		SwingUtilities.invokeLater(new Runnable() {
             public void run() {
+//            	w.setUndecorated(true);
+//            	w.setOpacity(0.5f);
             	w.begin();
             	w.setBounds(0,0,600,200);
             	w.setAlwaysOnTop(true);
