@@ -26,7 +26,7 @@ public class Main {
 		int frame = 0;
 		int length;
 		String mixerName = ".*Primary Sound Capture.*";
-		//mixerName = ".*What U Hear.*";
+		mixerName = ".*What U Hear.*";
 		for (Mixer.Info info : AudioSystem.getMixerInfo()) {
 			System.out.println(info.getName());
 			if (info.getName().matches(mixerName)) {
@@ -59,7 +59,7 @@ public class Main {
 		
 		final VisualiserWindow w = new VisualiserWindow();
 		
-		Visualiser vis = new FFTFrequencyVisualiser(buffer);
+		Visualiser vis = new RadialFFTFrequencyVisualiser(buffer);
 		//Visualiser vis = new StreamVisualiser(buffer,5000);
 		vis.setBackground(Color.BLACK);
 		vis.setForeground(Color.GREEN);
