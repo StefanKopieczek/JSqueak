@@ -24,9 +24,12 @@ public class RadialFFTFrequencyVisualiser extends Visualiser{
 	 */
 	public void update(Graphics g) {
 		AudioBuffer.Segment segment = mBuffer.getSegment(8192);
-		float R = getForeground().getRed();
-		float G = getForeground().getGreen();
-		float B = getForeground().getBlue();
+		int fR = getForeground().getRed();
+		int fG = getForeground().getGreen();
+		int fB = getForeground().getBlue();
+		int bR = getBackground().getRed();
+		int bG = getBackground().getGreen();
+		int bB = getBackground().getBlue();
 
 		FastFourierTransformer fft = new FastFourierTransformer(DftNormalization.STANDARD);
 		Complex[] transformed = fft.transform(segment.asArray(), TransformType.FORWARD);
@@ -39,8 +42,15 @@ public class RadialFFTFrequencyVisualiser extends Visualiser{
 			double energy = transformed[i].abs();
 			
 			double scale = Math.min(1,energy/8000000);
+			
+			if (scale <= 0.1) {
+				continue;
+			}
 
-			g.setColor(new Color((int)(R*scale),(int)(G*scale),(int)(B*scale)));
+			int R = (int) (bR + (fR-bR)*scale);
+			int G = (int) (bG + (fG-bG)*scale);
+			int B = (int) (bB + (fB-bB)*scale);
+			g.setColor(new Color(R,G,B));
 					
 			g.drawOval((getWidth()-r)/2, (getHeight()-r)/2, r, r);
 		}

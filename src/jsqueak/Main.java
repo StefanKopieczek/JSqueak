@@ -72,7 +72,7 @@ public class Main {
 //            	w.setOpacity(0.5f);
             	w.begin();
             	w.setBounds(0,0,600,200);
-            	w.setAlwaysOnTop(true);
+            	//w.setAlwaysOnTop(true);
             }
         });
 		
