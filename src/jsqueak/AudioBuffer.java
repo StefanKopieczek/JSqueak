@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class AudioBuffer {
 	private final int CHUNK_SIZE = 1024;
-	private final int BUFFER_LENGTH = 500;
+	private final int bufferLength;
 	private int[] raw_data;
 	private int mPointer;
 	private int lowPassFilterValue = 200;
@@ -18,7 +18,12 @@ public class AudioBuffer {
 	private ArrayList<AudioBufferListener> mListeners;
 	
 	public AudioBuffer() {
-		this.raw_data = new int[this.BUFFER_LENGTH * this.CHUNK_SIZE];
+		this(500000);
+	}
+	
+	public AudioBuffer(int length) {
+		bufferLength = length;
+		this.raw_data = new int[this.bufferLength];
 		this.mPointer = 0;
 		mListeners = new ArrayList<AudioBufferListener>();
 	}

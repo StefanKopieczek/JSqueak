@@ -1,7 +1,7 @@
 package jsqueak;
 
 public abstract class Pipe {
-	private Pipe mInput;
+	protected Pipe mInput;
 	private Object lock;
 	
 	public Pipe() {
@@ -13,6 +13,10 @@ public abstract class Pipe {
 	}
 	
 	public abstract int read(int[] chunk, int start, int length);
+	
+	public interface Pump {
+		public void pump();
+	}
 	
 	protected void block() {
 		synchronized(lock) {
