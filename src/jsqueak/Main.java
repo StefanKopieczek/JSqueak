@@ -1,61 +1,22 @@
 package jsqueak;
 
 import java.awt.Color;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Line;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.Mixer;
-import javax.sound.sampled.TargetDataLine;
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 public class Main {
 	public static void main(String[] args) {
-		TargetDataLine line = null;
-		Mixer mixer = null;
 		final AudioBuffer buffer = new AudioBuffer();
 		PeakListener peakListener = new PeakListener(buffer, 300,500);
 		//buffer.activateLowPassFilter(100);
 		//peakListener.addPeakHandler(new LetterDetector("letterData.txt", 1));
 		//peakListener.addPeakHandler(new LetterTrainer("letterData.txt"));
-		byte[] rawChunk = new byte[1024];
 		int[] chunk = new int[256];
-		int frame = 0;
 		int length;
+		
 		String mixerName = ".*Primary Sound Capture.*";
 		mixerName = ".*What U Hear.*";
-		for (Mixer.Info info : AudioSystem.getMixerInfo()) {
-			System.out.println(info.getName());
-			if (info.getName().matches(mixerName)) {
-				System.out.println("GETTING MIXER");
-				mixer = AudioSystem.getMixer(info);
-				break;
-			}
-		}
-		
-		for (Line.Info info : mixer.getTargetLineInfo()) {
-			System.out.println(info.toString());
-			try {
-				line = (TargetDataLine) mixer.getLine(info);
-				System.out.println(line.getFormat().getChannels());
-				System.out.println(line.getFormat().getSampleSizeInBits());
-
-			} catch (LineUnavailableException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		try {
-			line.open();
-		} catch (LineUnavailableException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		line.start();
+		Pipe inputPipe = new AudioDeviceInputPipe(mixerName);
 		
 		final VisualiserWindow w = new VisualiserWindow();
 		
@@ -78,17 +39,9 @@ public class Main {
 		
 		int ii = 0;
 		while (true){
-			length = line.read(rawChunk,0,rawChunk.length);
+			length = inputPipe.read(chunk,0,chunk.length);
 			
-			frame = 0;
-			for (int i=0; i<length; i+=4) {
-				ByteBuffer bB = ByteBuffer.wrap(new byte[]{rawChunk[i],rawChunk[i+1]});
-				bB.order(ByteOrder.LITTLE_ENDIAN);  // if you want little-endian
-				chunk[frame] = bB.getShort();
-				frame += 1;
-			}
-			
-			buffer.addSamples(chunk, length/4);
+			buffer.addSamples(chunk, length);
 			
 			//peakListener.analyseBuffer();
 			

@@ -1,5 +1,7 @@
 package jsqueak;
 
+import java.util.ArrayList;
+
 /**
  * A super-fast audio buffer.
  * Pointers & shit. It's basically C, but in Java. I win.
@@ -13,10 +15,20 @@ public class AudioBuffer {
 	private int mPointer;
 	private int lowPassFilterValue = 200;
 	private boolean lowPassFilterOn = false;
+	private ArrayList<AudioBufferListener> mListeners;
 	
 	public AudioBuffer() {
 		this.raw_data = new int[this.BUFFER_LENGTH * this.CHUNK_SIZE];
 		this.mPointer = 0;
+		mListeners = new ArrayList<AudioBufferListener>();
+	}
+	
+	public void addListener(AudioBufferListener l) {
+		mListeners.add(l);
+	}
+	
+	public void removeListener(AudioBufferListener l) {
+		mListeners.remove(l);
 	}
 	
 	public void activateLowPassFilter(int value) {
@@ -90,6 +102,10 @@ public class AudioBuffer {
 		if (mPointer >= raw_data.length) {
 			mPointer -= raw_data.length;
 		}
+		
+		for (AudioBufferListener l : mListeners) {
+			l.onSamplesAdded(length);
+		}
 	}
 	
 	/**
@@ -99,7 +115,7 @@ public class AudioBuffer {
 	 *
 	 */
 	public class Segment {
-		private final int startPointer;
+		private int startPointer;
 		public int length;
 		private final AudioBuffer mBuffer;
 		
@@ -115,7 +131,17 @@ public class AudioBuffer {
 			this.length = other.length;
 		}
 		
-		public double[] asArray() {
+		public int[] asArray() {
+			int[] vals = new int[this.length];
+			
+			for (int i=0; i<this.length; i++) {
+				vals[i] = getSample(i);
+			}
+			
+			return vals;
+		}
+		
+		public double[] asArrayOfDoubles() {
 			double[] vals = new double[this.length];
 			
 			for (int i=0; i<this.length; i++) {
@@ -138,6 +164,16 @@ public class AudioBuffer {
 				absStart -= mBuffer.raw_data.length;
 			}
 			return new Segment(mBuffer, absStart, length);
+		}
+		
+		public void move(int amount) {
+			startPointer += amount;
+			if (startPointer >= mBuffer.raw_data.length){
+				startPointer -= mBuffer.raw_data.length;
+			}
+			else if (startPointer < 0){
+				startPointer += mBuffer.raw_data.length;
+			}
 		}
 		
 		/**
