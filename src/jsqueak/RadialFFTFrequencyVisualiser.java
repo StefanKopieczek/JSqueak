@@ -32,7 +32,7 @@ public class RadialFFTFrequencyVisualiser extends Visualiser{
 		int bB = getBackground().getBlue();
 
 		FastFourierTransformer fft = new FastFourierTransformer(DftNormalization.STANDARD);
-		Complex[] transformed = fft.transform(segment.asArray(), TransformType.FORWARD);
+		Complex[] transformed = fft.transform(segment.asArrayOfDoubles(), TransformType.FORWARD);
 		int numBars = 300;
 		double dr = (double)getWidth() / (double)numBars;
 

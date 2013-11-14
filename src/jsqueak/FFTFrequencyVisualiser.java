@@ -26,7 +26,7 @@ public class FFTFrequencyVisualiser extends Visualiser{
 		AudioBuffer.Segment segment = mBuffer.getSegment(8192);
 
 		FastFourierTransformer fft = new FastFourierTransformer(DftNormalization.STANDARD);
-		Complex[] transformed = fft.transform(segment.asArray(), TransformType.FORWARD);
+		Complex[] transformed = fft.transform(segment.asArrayOfDoubles(), TransformType.FORWARD);
 		int numBars = 300;
 		double dx = (double)getWidth() / (double)numBars;
 		int prevX = 0;
