@@ -1,6 +1,7 @@
 package jsqueak;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A super-fast audio buffer.
@@ -45,15 +46,19 @@ public class AudioBuffer {
 		lowPassFilterOn = false;
 	}
 	
+	public void clear() {
+		Arrays.fill(raw_data, 0);
+	}
+	
 	public int getSample(int index) {
 		return getAbsSample(mPointer + index);
 	}
 	
 	public int getAbsSample(int index) {
-		if (index >= this.raw_data.length) {
+		while (index >= this.raw_data.length) {
 			index -= this.raw_data.length;
 		}
-		if (index < 0) {
+		while (index < 0) {
 			index += this.raw_data.length;
 		}
 		return raw_data[index];

@@ -14,6 +14,9 @@ public abstract class Pipe {
 	
 	public abstract int read(int[] chunk, int start, int length);
 	
+	public void close() {
+	}
+	
 	public interface Pump {
 		public void pump();
 	}

@@ -4,6 +4,10 @@ import java.awt.Color;
 
 import javax.swing.SwingUtilities;
 
+import visualisation.RadialFFTFrequencyVisualiser;
+import visualisation.Visualiser;
+import visualisation.VisualiserWindow;
+
 public class Main {
 	public static void main(String[] args) {
 		//PeakListener peakListener = new PeakListener(buffer, 300,500);
@@ -17,14 +21,14 @@ public class Main {
 		
 		mixerName = ".*Primary Sound Driver.*";
 		AudioSinkPipe outputPipe = new AudioSinkPipe();
-		AudioBufferPipe bufferPipe = new AudioBufferPipe(500000);	
+		AudioBufferPipe bufferPipe = new AudioBufferPipe(50000);	
 		bufferPipe.readFrom(inputPipe);
 		outputPipe.readFrom(bufferPipe);
 		
 		final VisualiserWindow w = new VisualiserWindow();
 		
-		final Visualiser vis = new RadialFFTFrequencyVisualiser(bufferPipe.getbuffer());
-		//Visualiser vis = new StreamVisualiser(buffer,5000);
+		//final Visualiser vis = new RadialFFTFrequencyVisualiser(bufferPipe.getBuffer());
+		final Visualiser vis = new RadialFFTFrequencyVisualiser(bufferPipe.getBuffer());
 		vis.setBackground(Color.BLACK);
 		vis.setForeground(Color.GREEN);
 		w.add(vis);
