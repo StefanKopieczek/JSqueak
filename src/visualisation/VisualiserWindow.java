@@ -1,4 +1,4 @@
-package jsqueak;
+package visualisation;
 import javax.swing.JFrame;
 
 

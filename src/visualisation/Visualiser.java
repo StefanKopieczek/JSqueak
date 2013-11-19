@@ -1,8 +1,10 @@
-package jsqueak;
+package visualisation;
 
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
+
+import jsqueak.AudioBuffer;
 
 public abstract class Visualiser extends JPanel{
 	protected int mWidth, mHeight;

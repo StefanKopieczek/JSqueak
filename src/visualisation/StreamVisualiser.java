@@ -1,6 +1,9 @@
-package jsqueak;
+package visualisation;
 
 import java.awt.Graphics;
+
+import jsqueak.AudioBuffer;
+import jsqueak.AudioBuffer.Segment;
 
 public class StreamVisualiser extends Visualiser{
 	int mStreamLength;

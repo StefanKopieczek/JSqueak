@@ -1,9 +1,13 @@
-package jsqueak;
+package visualisation;
 
 import java.awt.Graphics;
 
+import jsqueak.AudioBuffer;
+import jsqueak.AudioUtils;
+import jsqueak.AudioBuffer.Segment;
+
 public class FrequencyVisualiser extends Visualiser{
-	private int numBars = 300;
+	private int numBars = 50;
 	private int minFreq = 40;
 	private int maxFreq = 1000;
 
@@ -18,7 +22,7 @@ public class FrequencyVisualiser extends Visualiser{
 	 */
 	public void update(Graphics g) {
 		g.setColor(this.getForeground());
-		AudioBuffer.Segment segment = mBuffer.getSegment(2048);
+		AudioBuffer.Segment segment = mBuffer.getSegment(8192);
 		int df = (maxFreq - minFreq) / numBars;
 		double dx = (double)getWidth() / (double)numBars;
 		int prevX = 0;
@@ -33,12 +37,12 @@ public class FrequencyVisualiser extends Visualiser{
 			int size = (int) (scale*getHeight());
 			int y = getHeight()-size-1;
 					
-			g.drawLine(prevX,prevY,x,y);
+			//g.drawLine(prevX,prevY,x,y);
 
 			prevX = x;
 			prevY = y;
 			
-			//g.fillRect(x, mHeight-size, dx, size);
+			g.fillRect(x, y, (int) dx, size);
 		}
 	}
 

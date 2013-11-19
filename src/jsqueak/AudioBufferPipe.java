@@ -25,6 +25,10 @@ implements AudioBufferListener{
 	public AudioBuffer getBuffer() {
 		return mBuffer;
 	}
+	
+	public void clearBuffer() {
+		mBuffer.clear();
+	}
 
 	@Override
 	public int read(int[] chunk, int start, int length) {
@@ -35,7 +39,7 @@ implements AudioBufferListener{
 		}
 		
 		int[] data = mSegment.subsegment(0, samplesRequested).asArray();
-		System.arraycopy(data, 0, chunk, 0, length);
+		System.arraycopy(data, 0, chunk, start, length);
 		mSegment.move(length);
 		mSegment.extend(-length);
 		

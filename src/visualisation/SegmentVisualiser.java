@@ -1,7 +1,9 @@
-package jsqueak;
+package visualisation;
 
 import java.awt.Graphics;
 
+import jsqueak.AudioBuffer;
+import jsqueak.PeakHandler;
 import jsqueak.AudioBuffer.Segment;
 
 public class SegmentVisualiser extends Visualiser

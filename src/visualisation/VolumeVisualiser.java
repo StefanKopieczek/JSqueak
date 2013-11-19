@@ -1,7 +1,10 @@
-package jsqueak;
+package visualisation;
 
 import java.awt.Color;
 import java.awt.Graphics;
+
+import jsqueak.AudioBuffer;
+import jsqueak.AudioUtils;
 
 public class VolumeVisualiser extends Visualiser{
 	public VolumeVisualiser(AudioBuffer buffer) {

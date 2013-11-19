@@ -61,4 +61,9 @@ public class AudioDeviceInputPipe extends Pipe {
 		return amountRead/4;
 	}
 
+	@Override
+	public void close() {
+		line.stop();
+		line.close();
+	}
 }
