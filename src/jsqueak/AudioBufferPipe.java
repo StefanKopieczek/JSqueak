@@ -22,7 +22,7 @@ implements AudioBufferListener{
 		mThread.start();
 	}
 	
-	public AudioBuffer getbuffer() {
+	public AudioBuffer getBuffer() {
 		return mBuffer;
 	}
 
@@ -30,7 +30,7 @@ implements AudioBufferListener{
 	public int read(int[] chunk, int start, int length) {
 		samplesRequested = length;
 		
-		if (mSegment.length < samplesRequested) {
+		while (mSegment.length < samplesRequested) {
 			block();
 		}
 		
